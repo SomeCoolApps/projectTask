@@ -1,0 +1,134 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Taks DashBoard</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<link rel="stylesheet" type="text/css"
+	href="webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
+
+<link rel="stylesheet" th:href="@{/css/main.css}"
+	href="../../css/main.css" />
+	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"/>
+
+</head>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+
+<script>
+var app = angular.module("myShoppingList", []); 
+app.controller("myCtrl", function($scope) {
+    $scope.products = ["Milk", "Bread", "Cheese"];
+    $scope.addItem = function () {
+        $scope.errortext = "";
+        if (!$scope.addMe) {return;}
+        if ($scope.products.indexOf($scope.addMe) == -1) {
+            $scope.products.push($scope.addMe);
+        } else {
+            $scope.errortext = "The item is already in your shopping list.";
+        }
+    }
+    $scope.removeItem = function (x) {
+        $scope.errortext = "";
+        $scope.products.splice(x, 1);
+    } 
+});
+</script>
+
+<div ng-app="myShoppingList" ng-controller="myCtrl">
+    <ul>
+        <li ng-repeat="x in products">
+            {{x}}
+            <span ng-click="removeItem($index)">&times;</span>
+        </li>
+    </ul>
+    <input ng-model="addMe"/>
+    <button ng-click="addItem()">Add</button>
+   
+</div>
+
+<body>
+	<h1>Daily Tasks</h1>
+	<form action="#" th:action="@{/task}" th:object="${task}" method="post">
+		<table>
+
+			<tr>
+				<td><p>Id:</p></td>
+				<td><input type="text" th:field="*{id}" /></td>
+			</tr>
+
+
+			<tr>
+				<td><p>Message:</p></td>
+				<td><input type="text" th:field="*{summary}" /></td>
+			</tr>
+			
+			<tr><td>
+			  <div>
+            <label for="datePlanted">
+              <span th:text="#{task.dueDate}">Date </span>
+              (<span th:text="#{date.format}">YYYY/MM/DD</span>)
+            </label>
+            <input type="text" th:field="*{dueDate}"  />
+          </div>
+          </td></tr>
+			
+		</table>
+		
+		<div class="dropdown">
+    <a  class="dropdown-toggle" id="dropdown1" role="button" data-toggle="dropdown" data-target="#" href="#">Click here to show calendar</a>
+    <ul class="dropdown-menu" role="menu">
+        <datetimepicker data-ng-model="data.dateDropDownLink" data-datetimepicker-config="{ dropdownSelector: '#dropdown1' }"/>
+    </ul>
+</div>
+		<p>
+			<input type="submit" value="Submit" /> <input type="reset"
+				value="Reset" />
+		</p>
+	</form>
+
+
+	<div class="container">
+
+		<div class="starter-template">
+
+			<h1>
+				<span th:text="'Message: ' + ${user} +' Task List'"></span>
+			</h1>
+
+		</div>
+
+	</div>
+	<!-- /.container -->
+
+	<div class="tasklist" th:unless="${#lists.isEmpty(allTasks)}">
+
+		<table>
+			<thead>
+				<tr>
+					<th th:text="#{task.dueDate}">Date Planted</th>
+					<th th:text="#{task.summary}">Covered</th>
+					<th th:text="#{task.description}">Type</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="sb : ${allTasks}">
+
+					<td th:text="${{sb.summary}}">summary</td>
+					<td th:text="${{sb.description}}">description</td>
+					<td th:text="${{sb.dueDate}}">13/01/2011</td>
+
+
+				</tr>
+			</tbody>
+
+		</table>
+	</div>
+
+
+
+
+	<script type="text/javascript"
+		src="webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</body>
+</html>
